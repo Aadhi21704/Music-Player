@@ -107,11 +107,6 @@ import re
 def natural_sort_key(s):
     return [int(text) if text.isdigit() else text.lower() for text in re.split(r'(\d+)', s)]
 
-
-def rerun():
-    raise st.runtime.scriptrunner.script_runner.RerunException(st.script_request_queue.RerunData())
-
-
 # --- Load files ---
 mp3_files_all = sorted(
     [f for f in os.listdir("mp3_files") if f.endswith(".mp3")],
@@ -197,7 +192,10 @@ def main():
 
     if song_selection != current_song:
         st.session_state.current_song_index = filtered_mp3_files.index(song_selection)
-        rerun()
+        # Toggle dummy state to force rerun
+        st.session_state["dummy_rerun"] = not st.session_state.get("dummy_rerun", False)
+        return  # stop further execution this run
 
 if __name__ == "__main__":
     main()
+
