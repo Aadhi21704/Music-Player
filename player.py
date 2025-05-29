@@ -176,8 +176,8 @@ def main():
     current_song = filtered_mp3_files[idx]
 
     # --- Audio Player centered below search ---
-    # Use key with current song so Streamlit reloads the player when song changes
-    st.audio(f"mp3_files/{current_song}", format="audio/mp3", start_time=0, key=f"audio_{current_song}")
+    audio_source = f"mp3_files/{current_song}?v={idx}"  # Add query param to force reload
+    st.audio(audio_source, format="audio/mp3", start_time=0)
 
     # --- Song List ---
     st.header("All Songs:")
@@ -189,7 +189,7 @@ def main():
 
     if song_selection != current_song:
         st.session_state.current_song_index = filtered_mp3_files.index(song_selection)
-        # No explicit rerun here — Streamlit will rerun automatically on session state change
+        # no explicit rerun, Streamlit reruns automatically
 
     # --- Album Art in sidebar ---
     album_img = song_to_album_art.get(current_song, "album_cover.jpeg")
