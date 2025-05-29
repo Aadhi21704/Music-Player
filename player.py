@@ -130,7 +130,7 @@ for song in mp3_files_all:
 def main():
     st.title("🎧 Playfy Music Player")
 
-    # --- Top center: Search bar and media player ---
+    # --- Top center: Search bar ---
     st.markdown(
         """
         <style>
@@ -166,8 +166,6 @@ def main():
     # --- Session state ---
     if "current_song_index" not in st.session_state:
         st.session_state.current_song_index = 0
-    if "dummy_rerun" not in st.session_state:
-        st.session_state.dummy_rerun = False
 
     # Clamp index
     st.session_state.current_song_index = min(
@@ -176,6 +174,10 @@ def main():
 
     idx = st.session_state.current_song_index
     current_song = filtered_mp3_files[idx]
+
+    # --- Audio Player centered below search ---
+    # Use key with current song so Streamlit reloads the player when song changes
+    st.audio(f"mp3_files/{current_song}", format="audio/mp3", start_time=0, key=f"audio_{current_song}")
 
     # --- Song List ---
     st.header("All Songs:")
@@ -186,17 +188,8 @@ def main():
         st.session_state.current_song_index = 0
 
     if song_selection != current_song:
-        # Update session state index immediately
         st.session_state.current_song_index = filtered_mp3_files.index(song_selection)
-        # Immediately update local vars so audio player plays correct song this run
-        idx = st.session_state.current_song_index
-        current_song = filtered_mp3_files[idx]
-        # Force a rerun to refresh UI with new song playing
-        st.session_state["dummy_rerun"] = not st.session_state.get("dummy_rerun", False)
-        return
-
-    # --- Audio Player centered below search ---
-    st.audio(f"mp3_files/{current_song}", format="audio/mp3", start_time=0)
+        # No explicit rerun here — Streamlit will rerun automatically on session state change
 
     # --- Album Art in sidebar ---
     album_img = song_to_album_art.get(current_song, "album_cover.jpeg")
@@ -204,5 +197,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
