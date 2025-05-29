@@ -234,7 +234,7 @@ def main():
 
     # --- Album Art ---
     album_img = song_to_album_art.get(current_song, "album_cover.jpeg")
-    st.sidebar.image(f"album_art/{album_img}", use_column_width=True)
+    st.sidebar.image(f"album_art/{album_img}", use_container_width=True)
 
     # --- Song List ---
     st.header("All Songs:")
