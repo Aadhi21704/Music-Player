@@ -223,18 +223,15 @@ def main():
             st.experimental_rerun()
             return
 
+    with col2:
+        st.markdown(f"**Now Playing:** `{current_song}`")
+
     with col3:
         if st.button("⏭️ Next", key="next"):
             if idx < len(filtered_mp3_files) - 1:
                 st.session_state.current_song_index += 1
             st.experimental_rerun()
             return
-
-
-    with col3:
-        if st.button("⏭️ Next", key="next") and idx < len(filtered_mp3_files) - 1:
-            st.session_state.current_song_index += 1
-            st.experimental_rerun()
 
     # --- Audio Player (auto plays due to rerun with new file) ---
     st.sidebar.audio(f"mp3_files/{current_song}", format="audio/mp3", start_time=0)
